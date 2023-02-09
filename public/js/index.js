@@ -5,6 +5,7 @@ window.onload = () => {
 let socket = io();
 
 document.querySelector("form").addEventListener("submit", (e) => {
+  e.preventDefault();
   if (!document.getElementById("message-input").value) {
     alert("tidak ada inputan");
   } else {
@@ -33,11 +34,17 @@ document.querySelector("form").addEventListener("submit", (e) => {
     // emit
     socket.emit("message", { id: sessionStorage.getItem("id"), message: document.getElementById("message-input").value });
 
+    // loding button
+    setTimeout(() => {
+      document.getElementById("loading").classList.toggle("d-none");
+      document.querySelector("form").classList.toggle("d-none");
+    }, 3000);
+    document.querySelector("form").classList.toggle("d-none");
+    document.getElementById("loading").classList.toggle("d-none");
+
     // clear input
     document.getElementById("message-input").value = "";
   }
-
-  e.preventDefault();
 });
 
 socket.on("message", (data) => {
